@@ -1,19 +1,19 @@
-const chai = require('chai');
+const { setupBefore, setupChai, removeTestDB, runSQL } = require('./utils/test-utils');
+const chai = setupChai();
 const expect = chai.expect;
 
-const { runSQL } = require('./utils/test-utils');
-const { Image } = require('../db/models');
-
-console.log(process.env.DB_FILE)
-
 describe('Step 1 Specs - Create Image Table', () => {
+  let DB_TEST_FILE, SERVER_DB_TEST_FILE, models, server;
+  before(async () => ({ server, models, DB_TEST_FILE, SERVER_DB_TEST_FILE } = await setupBefore(__filename)));
+  after(async () => await removeTestDB(DB_TEST_FILE));
+
   context('Invalid Data', () => {
     it('does not allow `url` attribute to be empty', async () => {
       try {
-        await runSQL("INSERT INTO 'Images' DEFAULT VALUES;")
+        await runSQL("INSERT INTO 'Images' DEFAULT VALUES;", SERVER_DB_TEST_FILE)
       } catch(err) {
         try {
-          const image = Image.build({});
+          const image = models.Image.build({});
           await image.validate();
         } catch(err) {
           return;
@@ -30,10 +30,10 @@ describe('Step 1 Specs - Create Image Table', () => {
 
   context('Valid Data', () => {
     it('allows a string for the `url` attribute value', async () => {
-      await Image.create({ url: 'abc.png' });
+      await models.Image.create({ url: 'abc.png' });
     });
     it('automatically sets `createdAt` and `updatedAt', async () => {
-      await runSQL("INSERT INTO 'Images' ('url') VALUES ('xyz.png');")
+      await runSQL("INSERT INTO 'Images' ('url') VALUES ('xyz.png');", SERVER_DB_TEST_FILE)
     });
   });
 });

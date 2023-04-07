@@ -4,8 +4,7 @@ This content is totally optional. It is not required for assessments or project
 work. It has been included for any student who wishes to dig deeper into both
 **Polymorphic Associations** and **eager loading**.
 
-Begin by uncommenting the contents of the fourth test file:
-__server/test/step-bonus-spec.js__. Then, review the documentation on
+Begin by reviewing the documentation on
 [Polymorphic eager loading][eager-loading]. Now, implement as follows...
 
 Edit the `Image` model to include `Image.addHook()` for the `afterFind` event.
@@ -24,7 +23,7 @@ lazy loading).
 > point to the individual objects from the result, both on the result directly
 > and in the `dataValues` attribute.
 
-Verify by running the test for step 4: `npm test test/step-bonus-spec.js`
+Verify by running the test for step 4: `npm test test/bonus/step-bonus-spec.js`
 
 > Hint: If you continue to get errors like
 > `AssertionError: expected undefined to be an instance of ...`,

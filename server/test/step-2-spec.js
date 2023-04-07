@@ -1,17 +1,20 @@
-const chai = require('chai');
+const { setupBefore, setupChai, removeTestDB } = require('./utils/test-utils');
+const chai = setupChai();
 const expect = chai.expect;
 
-const { BlogPost, UserProfile, Image } = require('../db/models');
-
 describe('Step 2 Specs - Create Associations', () => {
+  let DB_TEST_FILE, SERVER_DB_TEST_FILE, models, server;
+  before(async () => ({ server, models, DB_TEST_FILE, SERVER_DB_TEST_FILE } = await setupBefore(__filename)));
+  after(async () => await removeTestDB(DB_TEST_FILE));
+
   let testPost;
   let testProfile;
   let testPostImages = [];
   let testProfileImages = [];
 
   before(async () => {
-    testPost = await BlogPost.create({ content: 'Test Blog Post' });
-    testProfile = await UserProfile.create({
+    testPost = await models.BlogPost.create({ content: 'Test Blog Post' });
+    testProfile = await models.UserProfile.create({
       displayName: 'Test User Profile'
     });
     testPostImages.push(await testPost.createImage({ url: 'blog1.png' }));
@@ -31,7 +34,7 @@ describe('Step 2 Specs - Create Associations', () => {
       for (let i in foundImages) {
         const image = foundImages[i];
         expect(image.id).to.eq(testPostImages[i].id);
-        expect(image).to.be.an.instanceof(Image);
+        expect(image).to.be.an.instanceof(models.Image);
       }
     });
 
@@ -44,14 +47,14 @@ describe('Step 2 Specs - Create Associations', () => {
       for (let i in foundImages) {
         const image = foundImages[i];
         expect(image.id).to.eq(testProfileImages[i].id);
-        expect(image).to.be.an.instanceof(Image);
+        expect(image).to.be.an.instanceof(models.Image);
       }
     });
 
     it('assign image to blog post', async () => {
       const foundPost = await testPostImages[0].getBlogPost();
 
-      expect(foundPost).to.be.an.instanceof(BlogPost);
+      expect(foundPost).to.be.an.instanceof(models.BlogPost);
       expect(foundPost.id).to.eq(testPost.id);
       expect(testPostImages[0].imageableType).to.eq('BlogPost');
     });
@@ -59,7 +62,7 @@ describe('Step 2 Specs - Create Associations', () => {
     it('assign image to user profile', async () => {
       const foundProfile = await testProfileImages[0].getUserProfile();
 
-      expect(foundProfile).to.be.an.instanceof(UserProfile);
+      expect(foundProfile).to.be.an.instanceof(models.UserProfile);
       expect(foundProfile.id).to.eq(testPost.id);
       expect(testProfileImages[0].imageableType).to.eq('UserProfile');
     });

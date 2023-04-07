@@ -75,6 +75,14 @@ Use `npm run tests` to run all the tests.
 
 Debug and adjust your code until all are passing.
 
+## Submission
+
+Submit your work.
+
+1. Delete the `node_modules` folder in the __server__ directory
+2. Zip up the project folder
+3. Submit the zip file
+
 [sequelize-poly-assoc]: https://sequelize.org/docs/v6/advanced-association-concepts/polymorphic-associations/
 [db-schema]: https://appacademy-open-assets.s3.us-west-1.amazonaws.com/Modular-Curriculum/content/week-11/imageable-db-schema.png
 [db-diagram-info]: https://appacademy-open-assets.s3.us-west-1.amazonaws.com/Modular-Curriculum/content/week-11/imageable-db-diagram-info.txt
