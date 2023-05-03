@@ -12,6 +12,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Step 2 - define polymorphic association
       // Your code here
+      UserProfile.hasMany(models.Image, {
+        foreignKey: 'imageableId',
+        constraints: false,
+        scope: { // only connect to rows that have the same type?
+          imageableType: 'UserProfile'
+        }
+      });
     }
   };
   UserProfile.init({
